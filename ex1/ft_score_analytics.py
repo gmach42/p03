@@ -20,7 +20,7 @@ def main():
         try:
             scores.append(int(sys.argv[i]))
         except ValueError as e:
-            print(f"One of your score is not an integer:\n{e}\n")
+            print(f"Error: One of your score is not an integer:\n{e}\n")
             return
 
     print(f"Total players: {len(scores)}")
