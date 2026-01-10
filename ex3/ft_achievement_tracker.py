@@ -119,6 +119,7 @@ class AchievementTracker:
             }
             return rare_achievements
 
+
 def main():
     print("=== Achievement Tracker System ===\n")
     AchievementTracker.create_achievements_examples()
