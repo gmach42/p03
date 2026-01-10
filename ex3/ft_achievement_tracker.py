@@ -59,20 +59,19 @@ class AchievementTracker:
         @staticmethod
         def get_unique(player, all_players):
             """Get unique achievements of ONE player"""
+
             # Get all other players' achievements combined
-            other_players_achievements = (
-                AchievementTracker.Analytics.get_all_unique(
-                    [p for p in all_players if p != player]
-                )
-            )
-            player_achievement = player.get_achievements()
+            other = [p for p in all_players if p != player]
+            other_achiev = (AchievementTracker.Analytics.get_all_unique(other))
+
+            # Player archievements
+            player_achiev = player.get_achievements()
+
             # Return what this player has that others don't
-            unique_achievements = (
-                player_achievement.difference(other_players_achievements)
-            )
-            if not unique_achievements:
+            unique_achiev = (player_achiev.difference(other_achiev))
+            if not unique_achiev:
                 return None
-            return unique_achievements
+            return unique_achiev
 
         @staticmethod
         def get_diff(a, b):
@@ -85,7 +84,7 @@ class AchievementTracker:
         def get_common(players: list):
             """Get all common achievements across all players"""
             if not players:
-                return set()
+                raise ValueError("Player list is empty")
             all_achievements = [
                 player.get_achievements() for player in players
             ]
