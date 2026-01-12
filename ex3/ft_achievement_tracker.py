@@ -88,18 +88,21 @@ class AchievementTracker:
             all_achievements = [
                 player.get_achievements() for player in players
             ]
-            return set.intersection(*all_achievements)
+            common = set.intersection(*all_achievements)
+            if not common:
+                return None
+            return common
 
         @staticmethod
         def get_achievements_summary(players):
-            print("=== Achievement Analytics ===\n")
+            print("\n=== Achievement Analytics ===\n")
             unique = AchievementTracker.Analytics.get_all_unique(players)
             print(f"All unique achievements: {unique}")
             print(f"Total unique achievements count: {len(unique)}")
             common = AchievementTracker.Analytics.get_common(players)
             print(f"All common achievements: {common}")
             print(
-                f"Rare achievements (1 player): "
+                f"Ultra rare achievements (1 player): "
                 f"{AchievementTracker.Analytics.get_rare(players)}"
             )
 
@@ -129,10 +132,6 @@ def main():
     for achievement in players:
         print(achievement)
 
-    # Call a summary of unique and commons achievements
-    # as well as showing some stats about it
-    AchievementTracker.Analytics.get_achievements_summary(players)
-
     print("\n=== Tests ===")
     # Testing set() is fonctionning properly by adding one already
     # existing achievement and checking achievements doesn't change
@@ -156,18 +155,25 @@ def main():
     )
     # Testing to add a new player and
     # see if he's automatically added to players
-    print("\nAdding a new player: David\n")
+    print("\n- Adding a new player: David")
     david = AchievementTracker("David")
     david.unlock_multiple(
         'first_kill', 'joyous_folk',
-        'speed_demon', 'you_shall_not_pass')
+        'speed_demon', 'you_shall_not_pass', 'level_10')
+    print(david)
 
     # Get unique achievements for each player
-    print("Unique achievements per player:")
+    print("\n- Unique achievements per player:")
     for player in players:
         player_unique = (
             AchievementTracker.Analytics.get_unique(player, players))
         print(f"Achievements ONLY {player.name} has: {player_unique}")
+
+    # Finally call a summary of unique and commons achievements
+    # as well as showing some stats about it
+    AchievementTracker.Analytics.get_achievements_summary(players)
+
+    print("\nThanks for using the Achievement Tracker System!\n")
 
 
 if __name__ == "__main__":
