@@ -12,7 +12,10 @@ def main():
 
     print("=== Player Score Analytics ===\n")
     if len(sys.argv) < 2:
-        print("Please enter a score to register")
+        print(
+            "No scores provided. Usage: python3 "
+            "ft_score_analytics.py <score1> <score2> ..."
+        )
         return
 
     scores: list[int] = []
