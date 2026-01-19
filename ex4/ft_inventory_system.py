@@ -2,9 +2,6 @@
 
 import sys
 
-from secretstorage import Item
-
-
 # class Item:
 #     def __init__(
 #             self, name: str, price: int, type: str,
@@ -121,21 +118,30 @@ class InventoryMaster:
 
     @staticmethod
     def format_dict(d: dict) -> str:
+        """formats a dictionary into a string with key (value) pairs"""
         formatted = ", ".join(f"{key} ({value})" for key, value in d.items())
         return formatted
 
     @staticmethod
-    def percentage_inventory(q_item: int, total: int) -> float:
+    def perc_inventory(q_item: int, total: int) -> float:
+        """calculates percentage of a specific item in the inventory"""
         if total == 0:
             return 0.0
         return (q_item / total) * 100.0
 
+    def sort_inventory(self) -> dict:
+        """sort objs by quantity in descending order using lambda function"""
+        self.objs = dict(
+            sorted(self.objs.items(), key=lambda item: item[1], reverse=True)
+        )
+
     def display_inventory(self) -> None:
-        for obj in self.objs.keys():
-            print(
-                f"{obj}: {self.objs[obj]} units "
-                f"({self.percentage_inventory(self.objs[obj], self.total_items()):.1f}%)"
-            )
+        """displays each item with its quantity and percentage in inventory"""
+        for name, quantity in sorted(
+            self.objs.items(), key=lambda item: item[1], reverse=True
+        ):
+            percentage = self.perc_inventory(quantity, self.total_items())
+            print(f"{name}: {quantity} units ({percentage:.1f}%)")
 
     def most_abundant_item(self) -> str:
         if not self.objs:
@@ -148,6 +154,7 @@ class InventoryMaster:
         return min(self.objs, key=self.objs.get)
 
     def items_by_category(self) -> dict:
+        """categorizes items based on their quantity"""
         Abundant = {}
         Moderate = {}
         Scarce = {}
@@ -162,6 +169,7 @@ class InventoryMaster:
         return {"Abundant": Abundant, "Moderate": Moderate, "Scarce": Scarce}
 
     def restock_suggestions(self) -> list:
+        """suggest items that need restocking (quantity < 2)"""
         suggestions = []
         for obj in self.objs.keys():
             if self.objs[obj] < 2:
@@ -186,6 +194,7 @@ def ft_inventory_system():
             print(f"Error: Invalid item format '{sys.argv[i]}':\n{e}\n")
             return
 
+    # inv.sort_inventory()
     print(f"Total items in inventory: {inv.total_items()}")
     print(f"Unique item types: {len(inv.objs)}")
 
@@ -195,9 +204,7 @@ def ft_inventory_system():
     print("\n=== Inventory Statistics ===")
     most_abundant = inv.most_abundant_item()
     print(
-        f"Most abundant: "
-        f"{most_abundant} "
-        f"({inv.objs.get(most_abundant)} units)"
+        f"Most abundant: {most_abundant} ({inv.objs.get(most_abundant)} units)"
     )
     least_abundant = inv.least_abundant_item()
     print(
