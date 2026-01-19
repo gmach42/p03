@@ -1,12 +1,14 @@
-# yield, next(), iter(), range(), len(), print(), for loops
+import time
 
 
 class StreamWizard:
-    def __init__(self, name):
+    """Processes a stream of game events and provides analytics."""
+    def __init__(self, name: str):
         self.name = name
         self.events = []
 
     def events_generator(self, events: list[dict]):
+        """Generator that processes game events and yields formatted strings"""
         for event in events:
             try:
                 StreamWizard.Analytics.counters(event)
@@ -26,6 +28,7 @@ class StreamWizard:
                 print(f"KeyError: {e}")
 
     class Analytics:
+        """Class for stream analytics methods"""
         events_processed = 0
         high_levels = []
         treasure_events = 0
@@ -33,6 +36,7 @@ class StreamWizard:
 
         @classmethod
         def counters(cls, event: dict) -> None:
+            """Updates counters based on the event data"""
             cls.events_processed += 1
             if event["player"] not in cls.high_levels:
                 if event["data"]["level"] >= 10:
@@ -44,24 +48,25 @@ class StreamWizard:
 
         @classmethod
         def stream_analytics(cls) -> None:
+            """Displays analytics summary of the processed stream"""
             print("\n=== Stream Analytics ===\n")
             print(
                 f"Total events processed: {cls.events_processed}\n"
-                f"{len(cls.high_levels)} High-level players (+10):\n"
+                f"{len(cls.high_levels)} High-level players (+10): "
                 f"{cls.high_levels}\n"
                 f"Treasure events: {cls.treasure_events}\n"
                 f"Level-up events: {cls.levelup_events}\n"
             )
 
 
-def fibonacci(n):
+def fibonacci(n: int):
     a, b = 0, 1
     for _ in range(n):
         yield a
         a, b = b, a + b
 
 
-def is_prime(num):
+def is_prime(num: int) -> bool:
     if num < 2:
         return False
     for i in range(2, int(num**0.5) + 1):
@@ -72,6 +77,9 @@ def is_prime(num):
 
 def main():
     print("=== Game Data Stream Processor ===")
+
+    # Start timing
+    start_time = time.time()
 
     merlin = StreamWizard("Merlin")
 
@@ -89,11 +97,17 @@ def main():
             "data": {"level": 5},
             "event_type": "save monster",
         },
+        {
+            "id": 3,
+            "player": "charlie",
+            "data": {"level": 12},
+            "event_type": "item_found",
+        }
     ]
-    test_stream = merlin.events_generator(test)
 
-    for _ in range(2):
-        print(next(test_stream))
+    iter_test = iter(test)
+    print(next(iter_test))
+    print(next(iter_test))
 
     print("\nProcessing lots of game events...\n")
     try:
@@ -107,12 +121,16 @@ def main():
 
         merlin.Analytics.stream_analytics()
     except FileNotFoundError:
-        print("Please add a game_events.txt file")
+        print("Please add a game_events.txt file (and be in the directory).")
     except TypeError:
         print(
             "Please verify that the events are correctly "
             "implemented in your game_events.txt file"
         )
+
+    # Calculate elapsed time
+    elapsed_time = time.time() - start_time
+    print(f"Processing time: {elapsed_time:.3f} seconds")
 
     print("\n=== Generator Demonstration ===\n")
     # 10 Fibonacci numbers
