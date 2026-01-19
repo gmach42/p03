@@ -1,14 +1,16 @@
 import sys
 
 
-def get_average(scores: list):
+def get_average(scores: list) -> float:
+    """Calculates the average of a list of scores."""
     total = sum(scores)
     return (total / len(scores))
 
 
-def main():
+def ft_score_analytics():
+    """Analyzes player scores provided as command-line arguments."""
 
-    print("=== Player Score Analytics ===\n")
+    print("=== Player Score Analytics ===")
     if len(sys.argv) < 2:
         print(
             "No scores provided. Usage: python3 "
@@ -24,14 +26,14 @@ def main():
             print(f"Error: One of your score is not an integer:\n{e}\n")
             return
 
+    print(f"Scores processed:{scores}")
     print(f"Total players: {len(scores)}")
     print(f"Total score: {sum(scores)}")
     print(f"Average score: {get_average(scores)}")
     print(f"The best: {max(scores)}")
     print(f"The worst: {min(scores)}")
-    print(f"Score range: {max(scores) - min(scores)}")
-    print(f"Scores recap:\n{scores}")
+    print(f"Score range: {max(scores) - min(scores)}\n")
 
 
 if __name__ == "__main__":
-    main()
+    ft_score_analytics()

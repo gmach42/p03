@@ -3,22 +3,25 @@
 import sys
 
 
-def main():
+def ft_command_quest():
+    """Displays the arguments passed to the script."""
+
     print("=== Command Quest ===")
-    if len(sys.argv) < 2:
+    nb_args = len(sys.argv) - 1
+
+    # Handle no arguments case
+    if nb_args == 0:
         print("No arguments provided!")
     print(f"Program name: {sys.argv[0]}")
 
-    nb_args = len(sys.argv) - 1
-    i = 1
+    # Handle arguments case
     if nb_args != 0:
         print(f"Arguments received: {nb_args}")
-    while i <= nb_args:
+    for i in range(1, len(sys.argv)):
         print(f"Argument {i}: {sys.argv[i]}")
-        i += 1
 
-    print(f"Total arguments: {len(sys.argv)}")
+    print(f"Total arguments: {len(sys.argv)}\n")
 
 
 if __name__ == "__main__":
-    main()
+    ft_command_quest()

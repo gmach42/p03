@@ -95,12 +95,13 @@ class AchievementTracker:
 
         @staticmethod
         def get_achievements_summary(players):
+            """Print a summary of unique and common achievements"""
             print("\n=== Achievement Analytics ===\n")
             unique = AchievementTracker.Analytics.get_all_unique(players)
             print(f"All unique achievements: {unique}")
             print(f"Total unique achievements count: {len(unique)}")
             common = AchievementTracker.Analytics.get_common(players)
-            print(f"All common achievements: {common}")
+            print(f"\nCommon to all players: {common}")
             print(
                 f"Ultra rare achievements (1 player): "
                 f"{AchievementTracker.Analytics.get_rare(players)}"
@@ -122,15 +123,18 @@ class AchievementTracker:
             return rare_achievements
 
 
-def main():
+def ft_achievement_tracker():
+
     print("=== Achievement Tracker System ===\n")
+
+    # initialize players and achievements
     AchievementTracker.create_achievements_examples()
     players = AchievementTracker.get_players()
     alice = players[0]
     bob = players[1]
     charlie = players[2]
-    for achievement in players:
-        print(achievement)
+    for achievements in players:
+        print(achievements)
 
     print("\n=== Tests ===")
     # Testing set() is fonctionning properly by adding one already
@@ -144,6 +148,7 @@ def main():
     after = alice.achievements
     print(f"Diff: {AchievementTracker.Analytics.get_diff(before, after)}")
     print(f"{alice.__str__()}")
+
     print("\n- Testing common achievements between players")
     print(
         "Alice vs Bob common: "
@@ -177,4 +182,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    ft_achievement_tracker()
