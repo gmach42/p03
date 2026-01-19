@@ -32,34 +32,6 @@ class StreamWizard:
         levelup_events = 0
 
         @classmethod
-        def total_events(cls) -> int:
-            return cls.total_events
-
-        @staticmethod
-        def total_hl(events: list) -> int:
-            hl = 0
-            for event in events:
-                if event["data"]["level"] >= 10:
-                    hl += 1
-            return hl
-
-        @staticmethod
-        def total_treasures(events: list) -> int:
-            treasures = 0
-            for event in events:
-                if event["event_type"] == "item_found":
-                    treasures += 1
-            return treasures
-
-        @staticmethod
-        def total_lvlup(events: list) -> int:
-            lvlup = 0
-            for event in events:
-                if event["event_type"] == "level_up":
-                    lvlup += 1
-            return lvlup
-
-        @classmethod
         def counters(cls, event: dict) -> None:
             cls.events_processed += 1
             if event["player"] not in cls.high_levels:
@@ -71,7 +43,7 @@ class StreamWizard:
                 cls.levelup_events += 1
 
         @classmethod
-        def stream_analytics(cls, events: list) -> None:
+        def stream_analytics(cls) -> None:
             print("\n=== Stream Analytics ===\n")
             print(
                 f"Total events processed: {cls.events_processed}\n"
@@ -80,6 +52,22 @@ class StreamWizard:
                 f"Treasure events: {cls.treasure_events}\n"
                 f"Level-up events: {cls.levelup_events}\n"
             )
+
+
+def fibonacci(n):
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
+
+
+def is_prime(num):
+    if num < 2:
+        return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
 
 
 def main():
@@ -117,7 +105,7 @@ def main():
         for event in event_stream:
             print(event)
 
-        merlin.Analytics.stream_analytics(event_stream)
+        merlin.Analytics.stream_analytics()
     except FileNotFoundError:
         print("Please add a game_events.txt file")
     except TypeError:
@@ -125,6 +113,27 @@ def main():
             "Please verify that the events are correctly "
             "implemented in your game_events.txt file"
         )
+
+    print("\n=== Generator Demonstration ===\n")
+    # 10 Fibonacci numbers
+    fib_gen = fibonacci(100)
+    fib_to_print = ""
+    for num in range(10):
+        if num == 0:
+            fib_to_print += f"{next(fib_gen)}"
+        else:
+            fib_to_print += f", {next(fib_gen)}"
+    print(f"Fibonacci sequence (first 10 numbers): {fib_to_print}")
+
+    # First 5 prime numbers
+    prime_gen = (num for num in range(2, 100) if is_prime(num))
+    prime_to_print = ""
+    for num in range(5):
+        if num == 0:
+            prime_to_print += f"{next(prime_gen)}"
+        else:
+            prime_to_print += f", {next(prime_gen)}"
+    print(f"Prime numbers (first 5 primes): {prime_to_print}")
 
 
 if __name__ == "__main__":
